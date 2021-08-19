@@ -120,7 +120,7 @@ namespace MW_001_CodeWriter
             }
             else if (errFlag == false)
             {
-                toolStripStatusLabel1.Text = "ケーブル検索";
+                toolStripStatusLabel1.Text = "ケーブル検索中";
 
                 do
                 {
@@ -134,6 +134,7 @@ namespace MW_001_CodeWriter
 
                     if (ports.Length > 0)
                     {
+                        comboBox_comport.Items.Clear();
                         portNames = GetDeviceNames();
                         /*for (int i = 0; i < portNames.Length; i++)
                         {
@@ -141,6 +142,7 @@ namespace MW_001_CodeWriter
                         }*/
                         foreach (string str in portNames)
                         {
+                            //if(str ==)
                             comboBox_comport.Items.Add(str.Substring(0, str.IndexOf("(")));
                             LOG.WriteLine("LIST:" + str);
                         }
@@ -233,7 +235,7 @@ namespace MW_001_CodeWriter
         }
         private void button_action_Click(object sender, EventArgs e)
         {
-            if (statusFlag == false)
+            if (statusFlag == false && serialPort1.IsOpen == false)
             {
                 button_action.Enabled = false;
                 idleFlag = false;
@@ -249,7 +251,7 @@ namespace MW_001_CodeWriter
                 button_action.Text = "書込";
                 NextPannel();
 
-                toolStripStatusLabel1.Text = "所定の位置に磁石を近づけて、電源を入れて下さい。[起動未確認]";
+                toolStripStatusLabel1.Text = "所定の位置に磁石を近づけて、電源を入れて下さい。";
                 PowerON();
 
                 if (startUp == true)
@@ -484,7 +486,7 @@ namespace MW_001_CodeWriter
             {
                 if (s.Contains("start"))
                 {
-                    toolStripStatusLabel1.Text = "磁石が反応してません。このまま電源を入れ直して下さい。";
+                    toolStripStatusLabel1.Text = "磁石が反応してません。電源入れ直ししてください。";
                     Console.WriteLine(toolStripStatusLabel1.Text);
                     LOG.WriteLine(toolStripStatusLabel1.Text);
                     DialogResult result = MessageBox.Show(toolStripStatusLabel1.Text, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -499,7 +501,7 @@ namespace MW_001_CodeWriter
                     startTime = DateTime.Now; //時間取得
                     Console.WriteLine("LOG: " + startTime);
                     timeOut = true; //タイマー起動
-                    toolStripStatusLabel1.Text = "制御部起動開始 [起動完了まで35秒] [強制終了40秒]";
+                    toolStripStatusLabel1.Text = "制御部 起動開始 [起動完了まで35秒] [強制終了まで40秒]";
                     Console.WriteLine(toolStripStatusLabel1.Text);
                     LOG.WriteLine(toolStripStatusLabel1.Text); 
                     return;
@@ -508,7 +510,7 @@ namespace MW_001_CodeWriter
                 if (s.Contains("WAKEUP"))
                 {
                     toolStripProgressBar1.Value = 25;
-                    toolStripStatusLabel1.Text = "通信部起動開始 [起動完了まで20秒] [強制終了25秒]";
+                    toolStripStatusLabel1.Text = "通信部 起動開始 [起動完了まで20秒] [強制終了まで25秒]";
                     Console.WriteLine(toolStripStatusLabel1.Text);
                     LOG.WriteLine(toolStripStatusLabel1.Text); //テストモード起動中
                     return;
@@ -520,7 +522,7 @@ namespace MW_001_CodeWriter
                     int len = s.Length;
                     if (len < 15)
                     {
-                        toolStripStatusLabel1.Text = "SIMが読めません。";
+                        toolStripStatusLabel1.Text = "SIMカードを認識できません。";
                         Console.WriteLine(toolStripStatusLabel1.Text);
                         LOG.WriteLine(toolStripStatusLabel1.Text);
                         
@@ -1166,6 +1168,9 @@ namespace MW_001_CodeWriter
             }
         }
 
-
+        private void バージョンToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("危機管理型水位計MW-001 水位計ID書換ツール\nバージョン: 1.00");
+        }
     }
 }

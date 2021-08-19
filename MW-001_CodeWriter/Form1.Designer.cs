@@ -32,10 +32,15 @@ namespace MW_001_CodeWriter
             this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.comboBox_comport = new System.Windows.Forms.ComboBox();
             this.textBox_csv = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.textBox_tellnumber = new System.Windows.Forms.TextBox();
             this.textBox_devicecode = new System.Windows.Forms.TextBox();
             this.textBox_citycode = new System.Windows.Forms.TextBox();
@@ -47,11 +52,6 @@ namespace MW_001_CodeWriter
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.バージョンToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -81,6 +81,24 @@ namespace MW_001_CodeWriter
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "1 　水位計IDファイルとケーブル設定";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(23, 86);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(108, 25);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "ケーブル一覧";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(23, 42);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(144, 25);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "水位計IDファイル";
             // 
             // comboBox_comport
             // 
@@ -126,6 +144,33 @@ namespace MW_001_CodeWriter
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "2　水位計IDの確認と書込";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(251, 42);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(107, 25);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "水位計番号";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(23, 86);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(88, 25);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "電話番号";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(23, 42);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(110, 25);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "市町村コード";
+            // 
             // textBox_tellnumber
             // 
             this.textBox_tellnumber.Font = new System.Drawing.Font("Yu Gothic UI", 14.25F);
@@ -160,7 +205,7 @@ namespace MW_001_CodeWriter
             // button_action
             // 
             this.button_action.Font = new System.Drawing.Font("Yu Gothic UI", 14.25F);
-            this.button_action.Location = new System.Drawing.Point(490, 65);
+            this.button_action.Location = new System.Drawing.Point(490, 81);
             this.button_action.Name = "button_action";
             this.button_action.Size = new System.Drawing.Size(119, 71);
             this.button_action.TabIndex = 0;
@@ -171,7 +216,7 @@ namespace MW_001_CodeWriter
             // button_stop
             // 
             this.button_stop.Font = new System.Drawing.Font("Yu Gothic UI", 14.25F);
-            this.button_stop.Location = new System.Drawing.Point(624, 65);
+            this.button_stop.Location = new System.Drawing.Point(624, 82);
             this.button_stop.Name = "button_stop";
             this.button_stop.Size = new System.Drawing.Size(119, 71);
             this.button_stop.TabIndex = 1;
@@ -193,7 +238,7 @@ namespace MW_001_CodeWriter
             // toolStripProgressBar1
             // 
             this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
+            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 24);
             // 
             // toolStripStatusLabel1
             // 
@@ -223,51 +268,7 @@ namespace MW_001_CodeWriter
             this.バージョンToolStripMenuItem.Name = "バージョンToolStripMenuItem";
             this.バージョンToolStripMenuItem.Size = new System.Drawing.Size(80, 25);
             this.バージョンToolStripMenuItem.Text = "バージョン";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(23, 42);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(144, 25);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "水位計IDファイル";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(23, 86);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(108, 25);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "ケーブル一覧";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(23, 86);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(88, 25);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "電話番号";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(23, 42);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(110, 25);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "市町村コード";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(251, 42);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(107, 25);
-            this.label5.TabIndex = 8;
-            this.label5.Text = "水位計番号";
+            this.バージョンToolStripMenuItem.Click += new System.EventHandler(this.バージョンToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -287,7 +288,7 @@ namespace MW_001_CodeWriter
             this.MinimizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "MW-001用設定変更ソフトウェア";
+            this.Text = "MW-001 水位計ID設定ソフトウェア";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.panel1.ResumeLayout(false);
