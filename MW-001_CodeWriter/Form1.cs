@@ -22,9 +22,11 @@ namespace MW_001_CodeWriter
         DateTime startTime;
         string filePath;
         string tellnum;
-        string[] portNames;
+        string[,] portNames;
         string[] RxData;
         string dataIN;
+        string FDTI1;
+        string FDTI2;
 
         bool errFlag = false;
         bool endFlag = false;
@@ -51,6 +53,8 @@ namespace MW_001_CodeWriter
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            FDTI1 = "FTDIBUS\\VID_0403+PID_6001+00000000A\\0000";
+            FDTI2 = "FTDIBUS\\VID_0403+PID_6001+FT4U1V7RA\\0000";
             toolStripProgressBar1.Value = 0;
             button_action.Text = "選択";
             button_action.Enabled = false;
@@ -136,16 +140,20 @@ namespace MW_001_CodeWriter
                     {
                         comboBox_comport.Items.Clear();
                         portNames = GetDeviceNames();
-                        /*for (int i = 0; i < portNames.Length; i++)
+                        for (int i = 0; i < ports.Length; i++)
                         {
-                            comboBox_comport.Items.Add(portNames[i].Substring(0, portNames[i].IndexOf("(")));
-                        }*/
-                        foreach (string str in portNames)
+                            if (portNames[i,1].Contains(FDTI2))
+                            {
+                                comboBox_comport.Items.Add(portNames[i, 0]); //.Substring(0, portNames[i].IndexOf("(")));
+                            }
+                            
+                        }
+                        /*foreach (string str in portNames)
                         {
                             //if(str ==)
-                            comboBox_comport.Items.Add(str.Substring(0, str.IndexOf("(")));
+                            comboBox_comport.Items.Add(str);//.Substring(0, str.IndexOf("(")));
                             LOG.WriteLine("LIST:" + str);
-                        }
+                        }*/
 
                         int comIndex = comboBox_comport.FindString("USB Serial Port");
                         if (comIndex >= 0)
@@ -319,7 +327,7 @@ namespace MW_001_CodeWriter
                 this.Update();
 
                 //serialport設定
-                string strValue = portNames[comboBox_comport.SelectedIndex];
+                string strValue = portNames[comboBox_comport.SelectedIndex,0];
                 strValue = strValue.Remove(0, strValue.IndexOf("(") + 1);
                 strValue = strValue.Remove(strValue.IndexOf(")"));
 
@@ -335,7 +343,7 @@ namespace MW_001_CodeWriter
                 if (serialPort1.IsOpen)
                 {
                     toolStripStatusLabel1.Text = "接続済み";
-                    LOG.WriteLine("SELECT:" +portNames[comboBox_comport.SelectedIndex]); //COM名
+                    LOG.WriteLine("SELECT:" + portNames[comboBox_comport.SelectedIndex,0]); //COM名
                     LOG.WriteLine(toolStripStatusLabel1.Text); //ケーブル選択済み
 
                     //次のステップを表示
@@ -1122,10 +1130,11 @@ namespace MW_001_CodeWriter
             }
         }
 
-        public static string[] GetDeviceNames()
+        public static string[,] GetDeviceNames()
         {
 
             var deviceNameList = new System.Collections.ArrayList();
+            var deviceIDList = new System.Collections.ArrayList();
             var check = new System.Text.RegularExpressions.Regex("(COM[1-9][0-9]?[0-9]?)");
 
             ManagementClass mclass = new ManagementClass("Win32_PnPEntity");
@@ -1141,25 +1150,47 @@ namespace MW_001_CodeWriter
                     continue;
                 }
 
+                //DeviceIDプロパティを取得
+                var deviceIDPropertyValue = manageObj.GetPropertyValue("DeviceID");
+                if (deviceIDPropertyValue == null)
+                {
+                    continue;
+                }
+
                 //Nameプロパティ文字列の一部が"(COM1)～(COM999)"と一致するときリストに追加"
                 string name = namePropertyValue.ToString();
+                string deviceID = deviceIDPropertyValue.ToString();
                 if (check.IsMatch(name))
                 {
                     deviceNameList.Add(name);
+                    deviceIDList.Add(deviceID);
                 }
             }
 
             //戻り値作成
             if (deviceNameList.Count > 0)
             {
-                string[] deviceNames = new string[deviceNameList.Count];
+                string[,] deviceNames = new string[deviceNameList.Count, 2];
+                var name = deviceNameList;
+                var ID = deviceIDList;
+
+
+
+                for(int i=0; i < deviceNameList.Count; i++)
+                {
+                    deviceNames[i, 0] = name[i].ToString();
+                    deviceNames[i, 1] = ID[i].ToString();
+                }
+
+                /*
                 int index = 0;
                 foreach (var name in deviceNameList)
                 {
                     string dev = name.ToString();
                     //dev = dev.Substring(0, dev.IndexOf("("));
-                    deviceNames[index++] = dev;
-                }
+                    deviceNames[index++,] = dev;
+                }*/
+
                 return deviceNames;
             }
             else
