@@ -170,7 +170,7 @@ namespace MW_001_CodeWriter
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(110, 25);
             this.label4.TabIndex = 6;
-            this.label4.Text = "市町村コード";
+            this.label4.Text = "自治体コード";
             // 
             // textBox_tellnumber
             // 
@@ -252,6 +252,7 @@ namespace MW_001_CodeWriter
             // 
             this.serialPort1.BaudRate = 115200;
             this.serialPort1.ReadBufferSize = 8192;
+            this.serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort1_DataReceived);
             // 
             // menuStrip1
             // 

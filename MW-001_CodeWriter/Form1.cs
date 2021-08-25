@@ -73,6 +73,7 @@ namespace MW_001_CodeWriter
             timeLabel.Text = "";
             comboBox_comport.Items.Clear();
             panel2.Visible = false;
+            dataIN = null;
             Console.WriteLine("LOG: Form1_Load");
         }
 
@@ -433,6 +434,22 @@ namespace MW_001_CodeWriter
             panel2.Visible = true;
         }
 
+        private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            serialPort1.NewLine = "\n";
+
+            try
+            {
+                dataIN = serialPort1.ReadLine();
+            }
+            catch
+            {
+                Application.Exit();
+            }
+            
+            
+        }
+
 
         private void PowerON()
         {
@@ -444,15 +461,13 @@ namespace MW_001_CodeWriter
                     //this.Update();
                     Application.DoEvents();
 
-                    if (serialPort1.BytesToRead > 2 )
+                    if (dataIN != null) // (serialPort1.BytesToRead > 2 )
                     {
-                        dataIN = serialPort1.ReadLine();
-                        if(dataIN == null)
-                        {
-                            return;
-                        }
+
                         Console.WriteLine("LOG: " + dataIN);
                         this.Invoke(new EventHandler(SerialLog));
+                        dataIN = null;
+
                     }
 
                     if (timeOut == true)
@@ -723,19 +738,15 @@ namespace MW_001_CodeWriter
                     //this.Update();
                     Application.DoEvents();
 
-                    if (serialPort1.BytesToRead > 2)
-                    {
-                        dataIN = serialPort1.ReadLine();
-                        if (dataIN == null)
-                        {
-                            return;
-                        }
-                        Console.WriteLine("LOG: " + dataIN);
 
+                    if (dataIN != null)//(serialPort1.BytesToRead > 2 )
+                    {
+                        Console.WriteLine(dataIN);
                         if (dataIN.Contains("OK"))
                         {
                             startUp = true;
                         }
+                        dataIN = null;
                     }
 
                     if (timeOut == true)
@@ -743,7 +754,7 @@ namespace MW_001_CodeWriter
                         DateTime endDT = DateTime.Now;
                         TimeSpan ts = endDT - startTime;
                         //Console.WriteLine(ts);
-                        if (ts.TotalSeconds > 10)
+                        if (ts.TotalSeconds > 100)
                         {
                             //タイムアウトした
                             toolStripStatusLabel1.Text = "機器を認識できません。(10秒タイムアウト)";
@@ -812,15 +823,12 @@ namespace MW_001_CodeWriter
                     //this.Update();
                     Application.DoEvents();
 
-                    if (serialPort1.BytesToRead > 2)
+                    if (dataIN != null) // (serialPort1.BytesToRead > 2 )
                     {
-                        dataIN = serialPort1.ReadLine();
-                        if (dataIN == null)
-                        {
-                            return;
-                        }
                         Console.WriteLine("LOG: " + dataIN);
                         this.Invoke(new EventHandler(SerialWrite));
+                        //dataIN = serialPort1.ReadLine();
+                        dataIN = null;
                     }
 
                     if (timeOut == true)
@@ -847,6 +855,7 @@ namespace MW_001_CodeWriter
 
 
                 }
+                
                 if (startUp == true)
                 {
                     toolStripStatusLabel1.Text = "書込完了";
@@ -941,15 +950,11 @@ namespace MW_001_CodeWriter
                     //this.Update();
                     Application.DoEvents();
 
-                    if (serialPort1.BytesToRead > 2)
+                    if (dataIN != null) // (serialPort1.BytesToRead > 2 )
                     {
-                        dataIN = serialPort1.ReadLine();
-                        if (dataIN == null)
-                        {
-                            return;
-                        }
-                        Console.WriteLine("LOG: " + dataIN);
+                        //Console.WriteLine("LOG: " + dataIN);
                         this.Invoke(new EventHandler(SerialTest));
+                        dataIN = serialPort1.ReadLine();
                     }
 
                     if (timeOut == true)
@@ -974,7 +979,7 @@ namespace MW_001_CodeWriter
                         }
                     }
                 }
-
+                dataIN = null;
                 if (startUp == true)
                 {
                     toolStripStatusLabel1.Text = "確認完了";
@@ -1100,7 +1105,7 @@ namespace MW_001_CodeWriter
                             return;
                         }
                     }
-                    if (serialPort1.BytesToRead > 2)
+                    if (dataIN != null) // (serialPort1.BytesToRead > 2 )
                     {
                         /*dataIN += serialPort1.ReadExisting();
                         if (dataIN.IndexOf("\n") > 0)
@@ -1114,18 +1119,15 @@ namespace MW_001_CodeWriter
                         }
                         dataIN = string.Empty;
                         */
-                        dataIN = serialPort1.ReadLine();
-                        if (dataIN == null)
-                        {
-                            return;
-                        }
+
                         Console.WriteLine("LOG: " + dataIN);
                         this.Invoke(new EventHandler(SerialAttach));
+                        dataIN = serialPort1.ReadLine();
                     }
 
                 }
-                
 
+                dataIN = null;
                 if (startUp == true)
                 {
                     toolStripStatusLabel1.Text = "基地局接続確認完了";
@@ -1333,5 +1335,6 @@ namespace MW_001_CodeWriter
         {
             MessageBox.Show("危機管理型水位計MW-001 水位計ID設定ツール\nバージョン: 1.00\nCopyright (c) 2021 ABIT Co.\nReleased under the MIT license\nhttps://opensource.org/licenses/mit-license.php");
         }
+
     }
 }
