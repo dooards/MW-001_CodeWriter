@@ -26,7 +26,6 @@ namespace MW_001_CodeWriter
         string[,] portNames;
         //string[] RxData;
         string dataIN;
-        string OldText;
         string[] GenCable= new string[10];
         string[] FDTI = {"FT4TWAWE", "FT4XOY0Q", "FT4TYU5R", "FT4TZ2NT", "FT4XSQD3", "FT4U1Z7P", "FT4XOWVF", "FT4XSQ4O", "FT4TZ322", "FT4XRUHU", "FT4U1V7R", "FT4U1Y6Y" };
         
@@ -106,7 +105,7 @@ namespace MW_001_CodeWriter
         {
             //File Path
             string appPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            appPath = appPath.Replace("水位計ID設定ツール.exe", "");
+            appPath = appPath.Replace("水位計ID書換ツール.exe", "");
             Console.WriteLine("LOG: " + appPath + Environment.NewLine);
 
             //CSV File Search
@@ -251,6 +250,7 @@ namespace MW_001_CodeWriter
         private void button_stop_Click(object sender, EventArgs e)
         {
             endFlag = true;
+            string OldText;
             OldText = toolStripStatusLabel1.Text;
             toolStripStatusLabel1.Text = "停止ボタン";
             LOG.WriteLine(toolStripStatusLabel1.Text);
@@ -461,9 +461,13 @@ namespace MW_001_CodeWriter
                     //this.Update();
                     Application.DoEvents();
 
-                    if (dataIN != null) // (serialPort1.BytesToRead > 2 )
+                    if (serialPort1.BytesToRead > 2 )
                     {
-
+                        dataIN = serialPort1.ReadLine();
+                        if(dataIN == null)
+                        {
+                            return;
+                        }
                         Console.WriteLine("LOG: " + dataIN);
                         this.Invoke(new EventHandler(SerialLog));
                         dataIN = null;
@@ -509,6 +513,8 @@ namespace MW_001_CodeWriter
                         }
                         else
                         {
+                            string OldText;
+                            OldText = toolStripStatusLabel1.Text;
                             toolStripStatusLabel1.Text = "停止しますか";
                             LOG.WriteLine(toolStripStatusLabel1.Text);
                             DialogResult result = MessageBox.Show(toolStripStatusLabel1.Text, "停止ボタン", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -691,7 +697,7 @@ namespace MW_001_CodeWriter
                     else
                     {
                         //log
-                        LOG.WriteLine("自治体コード: " + textBox_citycode.Text);
+                        LOG.WriteLine("市町村コード: " + textBox_citycode.Text);
                         LOG.WriteLine("水位計番号: " + textBox_devicecode.Text);
                     }
                 }
@@ -738,6 +744,14 @@ namespace MW_001_CodeWriter
                     //this.Update();
                     Application.DoEvents();
 
+                    if (serialPort1.BytesToRead > 2)
+                    {
+                        dataIN = serialPort1.ReadLine();
+                        if (dataIN == null)
+                        {
+                            return;
+                        }
+                        Console.WriteLine("LOG: " + dataIN);
 
                     if (dataIN != null)//(serialPort1.BytesToRead > 2 )
                     {
@@ -823,8 +837,13 @@ namespace MW_001_CodeWriter
                     //this.Update();
                     Application.DoEvents();
 
-                    if (dataIN != null) // (serialPort1.BytesToRead > 2 )
+                    if (serialPort1.BytesToRead > 2)
                     {
+                        dataIN = serialPort1.ReadLine();
+                        if (dataIN == null)
+                        {
+                            return;
+                        }
                         Console.WriteLine("LOG: " + dataIN);
                         this.Invoke(new EventHandler(SerialWrite));
                         //dataIN = serialPort1.ReadLine();
@@ -918,7 +937,7 @@ namespace MW_001_CodeWriter
                 {
                     if (cityFlag == true)
                     {
-                        toolStripStatusLabel1.Text = "自治体コード書込";
+                        toolStripStatusLabel1.Text = "市町村コード書込";
                         LOG.WriteLine(toolStripStatusLabel1.Text); //CITYCODE
                         cityFlag = false;
                         
@@ -950,9 +969,14 @@ namespace MW_001_CodeWriter
                     //this.Update();
                     Application.DoEvents();
 
-                    if (dataIN != null) // (serialPort1.BytesToRead > 2 )
+                    if (serialPort1.BytesToRead > 2)
                     {
-                        //Console.WriteLine("LOG: " + dataIN);
+                        dataIN = serialPort1.ReadLine();
+                        if (dataIN == null)
+                        {
+                            return;
+                        }
+                        Console.WriteLine("LOG: " + dataIN);
                         this.Invoke(new EventHandler(SerialTest));
                         dataIN = serialPort1.ReadLine();
                     }
@@ -1045,7 +1069,7 @@ namespace MW_001_CodeWriter
                     if (s == "CITYCODE=" + textBox_citycode.Text)
                     {
                         toolStripProgressBar1.Value = 60;
-                        toolStripStatusLabel1.Text = "自治体コード確認";
+                        toolStripStatusLabel1.Text = "市町村コード確認";
                         LOG.WriteLine(toolStripStatusLabel1.Text);
                     }
                     else
@@ -1119,7 +1143,11 @@ namespace MW_001_CodeWriter
                         }
                         dataIN = string.Empty;
                         */
-
+                        dataIN = serialPort1.ReadLine();
+                        if (dataIN == null)
+                        {
+                            return;
+                        }
                         Console.WriteLine("LOG: " + dataIN);
                         this.Invoke(new EventHandler(SerialAttach));
                         dataIN = serialPort1.ReadLine();
@@ -1333,7 +1361,7 @@ namespace MW_001_CodeWriter
 
         private void バージョンToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("危機管理型水位計MW-001 水位計ID設定ツール\nバージョン: 1.00\nCopyright (c) 2021 ABIT Co.\nReleased under the MIT license\nhttps://opensource.org/licenses/mit-license.php");
+            MessageBox.Show("危機管理型水位計MW-001 水位計ID書換ツール\nバージョン: 1.00\nCopyright (c) 2021 ABIT Co.\nReleased under the MIT license\nhttps://opensource.org/licenses/mit-license.php");
         }
 
     }
