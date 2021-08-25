@@ -252,7 +252,7 @@ namespace MW_001_CodeWriter
             // 
             this.serialPort1.BaudRate = 115200;
             this.serialPort1.ReadBufferSize = 8192;
-            this.serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort1_DataReceived);
+
             // 
             // menuStrip1
             // 
