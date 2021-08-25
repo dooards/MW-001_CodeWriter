@@ -753,62 +753,64 @@ namespace MW_001_CodeWriter
                         }
                         Console.WriteLine("LOG: " + dataIN);
 
-                    if (dataIN != null)//(serialPort1.BytesToRead > 2 )
-                    {
-                        Console.WriteLine(dataIN);
-                        if (dataIN.Contains("OK"))
+                        if (dataIN != null)//(serialPort1.BytesToRead > 2 )
                         {
-                            startUp = true;
-                        }
-                        dataIN = null;
-                    }
-
-                    if (timeOut == true)
-                    {
-                        DateTime endDT = DateTime.Now;
-                        TimeSpan ts = endDT - startTime;
-                        //Console.WriteLine(ts);
-                        if (ts.TotalSeconds > 100)
-                        {
-                            //タイムアウトした
-                            toolStripStatusLabel1.Text = "機器を認識できません。(10秒タイムアウト)";
-                            LOG.WriteLine(toolStripStatusLabel1.Text);
-                            DialogResult result = MessageBox.Show(toolStripStatusLabel1.Text, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                            if (result == DialogResult.OK)
+                            Console.WriteLine(dataIN);
+                            if (dataIN.Contains("OK"))
                             {
-                                serialPort1.Close();
-                                LOG.Close();
-                                Application.Exit();
+                                startUp = true;
                             }
-                            return;
+                            dataIN = null;
                         }
-                    }
 
-                }
-                if (startUp == true)
-                {
-                    toolStripStatusLabel1.Text = "機器認識済み";
-                    Console.WriteLine(toolStripStatusLabel1.Text);
-                    LOG.WriteLine(toolStripStatusLabel1.Text);
-                    this.Update();
-                    System.Threading.Thread.Sleep(250);
-                    return;
-                }
-                if (endFlag == true)
-                {
-                    toolStripStatusLabel1.Text = "機器認識できず";
-                    LOG.WriteLine(toolStripStatusLabel1.Text);
-                    DialogResult result = MessageBox.Show(toolStripStatusLabel1.Text, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    if (result == DialogResult.OK)
-                    {
-                        serialPort1.Close();
-                        LOG.Close();
-                        Application.Exit();
+                        if (timeOut == true)
+                        {
+                            DateTime endDT = DateTime.Now;
+                            TimeSpan ts = endDT - startTime;
+                            //Console.WriteLine(ts);
+                            if (ts.TotalSeconds > 100)
+                            {
+                                //タイムアウトした
+                                toolStripStatusLabel1.Text = "機器を認識できません。(10秒タイムアウト)";
+                                LOG.WriteLine(toolStripStatusLabel1.Text);
+                                DialogResult result = MessageBox.Show(toolStripStatusLabel1.Text, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                                if (result == DialogResult.OK)
+                                {
+                                    serialPort1.Close();
+                                    LOG.Close();
+                                    Application.Exit();
+                                }
+                                return;
+                            }
+                        }
+
                     }
-                    return;
+                    if (startUp == true)
+                    {
+                        toolStripStatusLabel1.Text = "機器認識済み";
+                        Console.WriteLine(toolStripStatusLabel1.Text);
+                        LOG.WriteLine(toolStripStatusLabel1.Text);
+                        this.Update();
+                        System.Threading.Thread.Sleep(250);
+                        return;
+                    }
+                    if (endFlag == true)
+                    {
+                        toolStripStatusLabel1.Text = "機器認識できず";
+                        LOG.WriteLine(toolStripStatusLabel1.Text);
+                        DialogResult result = MessageBox.Show(toolStripStatusLabel1.Text, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        if (result == DialogResult.OK)
+                        {
+                            serialPort1.Close();
+                            LOG.Close();
+                            Application.Exit();
+                        }
+                        return;
+                    }
                 }
             }
+
             catch
             {
                 timeOut = false;
@@ -847,7 +849,7 @@ namespace MW_001_CodeWriter
                         Console.WriteLine("LOG: " + dataIN);
                         this.Invoke(new EventHandler(SerialWrite));
                         //dataIN = serialPort1.ReadLine();
-                        dataIN = null;
+                        //dataIN = null;
                     }
 
                     if (timeOut == true)
