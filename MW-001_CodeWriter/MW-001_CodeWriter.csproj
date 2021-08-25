@@ -7,7 +7,7 @@
     <ProjectGuid>{563DCEED-C6C8-462E-9633-047724D87357}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>MW_001_CodeWriter</RootNamespace>
-    <AssemblyName>水位計ID書換ツール</AssemblyName>
+    <AssemblyName>水位計ID設定ツール</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
