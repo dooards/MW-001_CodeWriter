@@ -72,7 +72,7 @@ namespace MW_001_CodeWriter
             timeLabel.Text = "";
             comboBox_comport.Items.Clear();
             panel2.Visible = false;
-            Console.WriteLine("Form1_Load");
+            Console.WriteLine("LOG: Form1_Load");
         }
 
         private void Form1_Activated(object sender, EventArgs e)
@@ -104,12 +104,12 @@ namespace MW_001_CodeWriter
         {
             //File Path
             string appPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            appPath = appPath.Replace("MW-001_CodeWriter.exe", "");
+            appPath = appPath.Replace("水位計ID書換ツール.exe", "");
             Console.WriteLine("LOG: " + appPath + Environment.NewLine);
 
             //CSV File Search
             string[] CSVfiles = System.IO.Directory.GetFiles(@appPath, "*.csv", System.IO.SearchOption.AllDirectories);
-            if (CSVfiles.Length == 1) //There is a csv file.
+            if (CSVfiles.Length == 1)
             {
                 filePath = CSVfiles[0];
                 LOG.WriteLine(filePath);
@@ -117,7 +117,7 @@ namespace MW_001_CodeWriter
                 toolStripProgressBar1.Value = 5; //action-0
                 toolStripStatusLabel1.Text = "水位計IDファイル読込済";
             }
-            else //None or many csv files.
+            else
             {
                 toolStripStatusLabel1.Text = "水位計IDファイルエラー";
                 errFlag = true;
@@ -180,6 +180,9 @@ namespace MW_001_CodeWriter
 
         public void MainThread()
         {
+            string[] ports;
+            int Gc = 0;
+
             if (errFlag == true)
             {
                 return;
@@ -190,8 +193,6 @@ namespace MW_001_CodeWriter
             }
 
             comboBox_comport.Items.Clear();
-            string[] ports;
-            int Gc = 0;
             ports = SerialPort.GetPortNames();
             if (ports.Length > 0) //COMポートの認識
             {
@@ -205,34 +206,18 @@ namespace MW_001_CodeWriter
                         {
                             GenCable[Gc] = portNames[i, 0];
                             Gc++;
-
-                            /*comboBox_comport.Items.Add("MW-001用接続ケーブル");
-                            int num = comboBox_comport.Items.Count - 1;
-                            comboBox_comport.SelectedIndex = num;
-                            
-                           
-                            toolStripStatusLabel1.Text = "ケーブル選択可能";
-                            toolStripProgressBar1.Value = 10;
-                            button_action.Enabled = true;
-                            */
                             
                         }
                         else //純正外
                         {
-                            /*
-                            //comboBox_comport.SelectedIndex = -1;
-                            //comboBox_comport.Text = "";
-                            toolStripStatusLabel1.Text = "ケーブル検索中";
-                            toolStripProgressBar1.Value = 5;
-                            button_action.Enabled = false;
-                            */
+
                         }
-                        
 
                     }
                 }
                 if(Gc == 0)
                 {
+                    comboBox_comport.Text = "";
                     toolStripStatusLabel1.Text = "ケーブル検索中";
                     toolStripProgressBar1.Value = 5;
                     button_action.Enabled = false;
@@ -241,9 +226,9 @@ namespace MW_001_CodeWriter
                 {
                     for(int num = 0; num < Gc; num++)
                     {
-                        comboBox_comport.Items.Add("MW-001用接続ケーブル " + num.ToString());
+                        comboBox_comport.Items.Add("MW-001用接続ケーブル ");// + num.ToString());
                     }
-                    comboBox_comport.SelectedIndex = Gc -1;
+                    comboBox_comport.SelectedIndex = Gc - 1;
                     toolStripStatusLabel1.Text = "ケーブル選択可能";
                     toolStripProgressBar1.Value = 10;
                     button_action.Enabled = true;
@@ -252,7 +237,6 @@ namespace MW_001_CodeWriter
             }
             else //未接続
             {
-                //comboBox_comport.SelectedIndex = -1;
                 comboBox_comport.Text = "";
 
                 toolStripStatusLabel1.Text = "ケーブル検索中";
@@ -275,14 +259,10 @@ namespace MW_001_CodeWriter
                 if(startUp == true)
                 {
                     toolStripStatusLabel1.Text = "終了します。";
-                    //DialogResult result = MessageBox.Show(toolStripStatusLabel1.Text, "終了", MessageBoxButtons.OK, MessageBoxIcon.None);
 
-                    //if (result == DialogResult.OK)
-                    //{
                     LOG.WriteLine("完了");
-                        LOG.Close();
-                        Application.Exit();
-                    //}
+                    LOG.Close();
+                    Application.Exit();
                     return;
                 }
                 else
@@ -310,7 +290,6 @@ namespace MW_001_CodeWriter
                     }
                     return;
                 }
-                
 
             }
         }
@@ -454,24 +433,24 @@ namespace MW_001_CodeWriter
             panel2.Visible = true;
         }
 
-        /*
-        private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            string str = serialPort1.ReadLine();
-            Console.WriteLine(str);
-        }
-        */
 
         private void PowerON()
         {
             try
             {
-                while (startUp == false  && errFlag == false) //&& endFlag == false
+                while (startUp == false  && errFlag == false && endFlag == false)
                 {
                     this.Activate();
                     //this.Update();
                     Application.DoEvents();
-                    
+
+                    if (serialPort1.BytesToRead > 2)
+                    {
+                        dataIN = serialPort1.ReadLine();
+                        Console.WriteLine("LOG: " + dataIN);
+                        this.Invoke(new EventHandler(SerialLog));
+                    }
+
                     if (timeOut == true)
                     {
                         DateTime endDT = DateTime.Now;
@@ -492,26 +471,6 @@ namespace MW_001_CodeWriter
                             }
                             return;
                         }
-                    }
-
-                    if (serialPort1.BytesToRead > 2)
-                    {
-                        /*dataIN += serialPort1.ReadLine();
-                        if(dataIN.IndexOf("\n") > 0)
-                        {
-                            RxData = dataIN.Split('\n'); //dataIN.Split(new string[] { "\n" }, StringSplitOptions.None); //Split('\n')
-                            foreach (string s in RxData)
-                            {
-                                Console.WriteLine("LOG: " + s);
-                            }
-                            this.Invoke(new EventHandler(SerialLog));
-                        }
-                        dataIN = string.Empty;*/
-
-                        dataIN = serialPort1.ReadLine();
-                        Console.WriteLine("LOG: " + dataIN);
-                        this.Invoke(new EventHandler(SerialLog));
-
                     }
 
                     if (endFlag == true)
@@ -762,6 +721,17 @@ namespace MW_001_CodeWriter
                     //this.Update();
                     Application.DoEvents();
 
+                    if (serialPort1.BytesToRead > 2)
+                    {
+                        dataIN = serialPort1.ReadLine();
+                        Console.WriteLine("LOG: " + dataIN);
+
+                        if (dataIN.Contains("OK"))
+                        {
+                            startUp = true;
+                        }
+                    }
+
                     if (timeOut == true)
                     {
                         DateTime endDT = DateTime.Now;
@@ -784,23 +754,6 @@ namespace MW_001_CodeWriter
                         }
                     }
 
-                    if (serialPort1.BytesToRead > 2)
-                    {
-                        /*dataIN += serialPort1.ReadExisting();
-                        if (dataIN.IndexOf("\n") > 0)
-                        {
-                            RxData = dataIN.Split('\n'); //dataIN.Split(new string[] { "\n" }, StringSplitOptions.None); //Split('\n')
-                            foreach (string s in RxData)
-                            {
-                                Console.WriteLine("LOG: " + s);
-                            }
-                            this.Invoke(new EventHandler(SerialAT));
-                        }
-                        dataIN = string.Empty;*/
-                        dataIN = serialPort1.ReadLine();
-                        Console.WriteLine("LOG: " + dataIN);
-                        this.Invoke(new EventHandler(SerialAT));
-                    }
                 }
                 if (startUp == true)
                 {
@@ -842,24 +795,9 @@ namespace MW_001_CodeWriter
             }
         }
 
-        private void SerialAT(object sender, EventArgs e)
-        {
-
-            //foreach (string s in RxData)
-            string s = dataIN;
-            {
-                if (s.Contains("OK"))
-                {
-                    Console.WriteLine("!!");
-                    //次へ進む
-                    startUp = true;
-                    return;
-                }
-            }
-        }
-
         private void CodeWrite()
         {
+
             try
             {
                 while (startUp == false && endFlag == false)
@@ -867,6 +805,13 @@ namespace MW_001_CodeWriter
                     this.Activate();
                     //this.Update();
                     Application.DoEvents();
+
+                    if (serialPort1.BytesToRead > 2)
+                    {
+                        dataIN = serialPort1.ReadLine();
+                        Console.WriteLine("LOG: " + dataIN);
+                        this.Invoke(new EventHandler(SerialWrite));
+                    }
 
                     if (timeOut == true)
                     {
@@ -889,26 +834,7 @@ namespace MW_001_CodeWriter
                             return;
                         }
                     }
-                    if (serialPort1.BytesToRead > 2)
-                    {
-                        /*
-                        dataIN += serialPort1.ReadExisting();//ReadExisting();
 
-                        if(dataIN.IndexOf("\n") > 0)
-                        {
-                            RxData = dataIN.Split('\n'); //dataIN.Replace("\r\n", "").Split('\n');
-                            foreach (string s in RxData)
-                            {
-                                Console.WriteLine("LOG: " + s);
-                            }
-                            this.Invoke(new EventHandler(SerialWrite));
-                        }
-                        dataIN = string.Empty;
-                        */
-                        dataIN = serialPort1.ReadLine();
-                        Console.WriteLine("LOG: " + dataIN);
-                        this.Invoke(new EventHandler(SerialWrite));
-                    }
 
                 }
                 if (startUp == true)
@@ -959,14 +885,12 @@ namespace MW_001_CodeWriter
             {
                 if (s.Contains("!!CITYCODE=" + textBox_citycode.Text))
                 {
-                    Console.WriteLine("!");
                     cityFlag = true;
                     toolStripProgressBar1.Value = 40;
                     return;
                 }
                 if (s.Contains("!!SENSORNO=" + textBox_devicecode.Text))
                 {
-                    Console.WriteLine("!");
                     sensFlag = true;
                     toolStripProgressBar1.Value = 50;
                     return;
@@ -975,18 +899,16 @@ namespace MW_001_CodeWriter
                 {
                     if (cityFlag == true)
                     {
-                        toolStripProgressBar1.Value = 45;
                         toolStripStatusLabel1.Text = "市町村コード書込";
                         LOG.WriteLine(toolStripStatusLabel1.Text); //CITYCODE
                         cityFlag = false;
-
+                        
                         //次へ進む
                         startUp = true;
                         return;
                     }
                     if (sensFlag == true)
                     {
-                        toolStripProgressBar1.Value = 55; //action-10
                         toolStripStatusLabel1.Text = "水位計番号書込";
                         LOG.WriteLine(toolStripStatusLabel1.Text); //SENSORNO
                         sensFlag = false;
@@ -1009,6 +931,13 @@ namespace MW_001_CodeWriter
                     //this.Update();
                     Application.DoEvents();
 
+                    if (serialPort1.BytesToRead > 2)
+                    {
+                        dataIN = serialPort1.ReadLine();
+                        Console.WriteLine("LOG: " + dataIN);
+                        this.Invoke(new EventHandler(SerialTest));
+                    }
+
                     if (timeOut == true)
                     {
                         DateTime endDT = DateTime.Now;
@@ -1030,27 +959,8 @@ namespace MW_001_CodeWriter
                             return;
                         }
                     }
-                    if (serialPort1.BytesToRead > 2)
-                    {
-                        /*
-                        dataIN += serialPort1.ReadExisting();
-                        if (dataIN.IndexOf("\n") > 0)
-                        {
-                            RxData = dataIN.Split('\n'); //dataIN.Split(new string[] { "\n" }, StringSplitOptions.None); //Split('\n')
-                            foreach (string s in RxData)
-                            {
-                                Console.WriteLine("LOG: " + s);
-                            }
-                            this.Invoke(new EventHandler(SerialTest));
-                        }
-                        dataIN = string.Empty;
-                        */
-                        dataIN = serialPort1.ReadLine();
-                        Console.WriteLine("LOG: " + dataIN);
-                        this.Invoke(new EventHandler(SerialTest));
-                    }
-
                 }
+
                 if (startUp == true)
                 {
                     toolStripStatusLabel1.Text = "確認完了";
@@ -1112,16 +1022,9 @@ namespace MW_001_CodeWriter
             {
                 if (s.Contains("CITYCODE="))
                 {
-                    Console.WriteLine("!");
 
-                    //string str0 = RxData[0];
-                    //string str1 = RxData[1];
-
-
-                    //if (str0 == "CITYCODE=" + textBox_citycode.Text)
                     if (s == "CITYCODE=" + textBox_citycode.Text)
                     {
-                        Console.WriteLine("!!");
                         toolStripProgressBar1.Value = 60;
                         toolStripStatusLabel1.Text = "市町村コード確認";
                         LOG.WriteLine(toolStripStatusLabel1.Text);
@@ -1134,10 +1037,8 @@ namespace MW_001_CodeWriter
                 }
                 if (s.Contains("SENSORNO="))
                 {
-                    //if (str1 == "SENSORNO=" + textBox_devicecode.Text)
                     if (s == "SENSORNO=" + textBox_devicecode.Text)
                     {
-                        Console.WriteLine("!!!");
                         toolStripProgressBar1.Value = 70;
                         toolStripStatusLabel1.Text = "水位計番号確認";
                         LOG.WriteLine(toolStripStatusLabel1.Text);
@@ -1269,14 +1170,12 @@ namespace MW_001_CodeWriter
             {
                 if (s.Contains("!!ATTACH"))
                 {
-                    Console.WriteLine("!");
                     toolStripProgressBar1.Value = 80;
                     toolStripStatusLabel1.Text = "基地局接続開始 [強制終了45秒]";
                     return;
                 }
                 if (s.Contains("OK"))
                 {
-                    Console.WriteLine("!");
                     toolStripProgressBar1.Value = 90;
                     startUp = true;
                     return;
@@ -1300,37 +1199,42 @@ namespace MW_001_CodeWriter
                 {
                     case "AT":
                         string ATCom = "!!AT" + Environment.NewLine;
-                        serialPort1.WriteLine(ATCom);
                         timeOut = true;
                         startTime = DateTime.Now;
+                        serialPort1.WriteLine(ATCom);
+
                         break;
 
                     case "CITYCODE":
                         string CCODE = "!!CITYCODE=" + textBox_citycode.Text + Environment.NewLine;
-                        serialPort1.WriteLine(CCODE);
                         timeOut = true;
                         startTime = DateTime.Now;
+                        serialPort1.WriteLine(CCODE);
+
                         break;
 
                     case "SENSORNO":
                         string SCODE = "!!SENSORNO=" + textBox_devicecode.Text + Environment.NewLine;
-                        serialPort1.WriteLine(SCODE);
                         timeOut = true;
                         startTime = DateTime.Now;
+                        serialPort1.WriteLine(SCODE);
+
                         break;
 
                     case "ATTACH":
                         string ATT = "!!ATTACH" + Environment.NewLine;
-                        serialPort1.WriteLine(ATT);
                         timeOut = true;
                         startTime = DateTime.Now;
+                        serialPort1.WriteLine(ATT);
+
                         break;
 
                     case "INFO":
                         string INF = "!!INFO" + Environment.NewLine;
-                        serialPort1.WriteLine(INF);
                         timeOut = true;
                         startTime = DateTime.Now;
+                        serialPort1.WriteLine(INF);
+
                         break;
                 }
             }
@@ -1409,7 +1313,7 @@ namespace MW_001_CodeWriter
 
         private void バージョンToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("危機管理型水位計MW-001 水位計ID書換ツール\nバージョン: 1.00");
+            MessageBox.Show("危機管理型水位計MW-001 水位計ID書換ツール\nバージョン: 1.00\nCopyright (c) 2021 ABIT Co.\nReleased under the MIT license\nhttps://opensource.org/licenses/mit-license.php");
         }
     }
 }
