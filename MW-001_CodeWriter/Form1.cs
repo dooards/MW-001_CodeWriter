@@ -35,10 +35,11 @@ namespace MW_001_CodeWriter
 
         bool errFlag = false; //error発生フラグ
         bool endFlag = false; //停止ボタンフラグ
-        bool statusFlag = false; //水位計ID書込み可
+        bool statusFlag = false; //水位計ID設定可
         bool timeOut = false;　//タイムアウトフラグ
         bool startUp = false; //起動済み確認フラグ
         bool idleFlag = false;　//動作待ちフラグ
+        bool regularMode = false; //通常モード
         bool cityFlag = false;
         bool sensFlag = false;
 
@@ -330,10 +331,11 @@ namespace MW_001_CodeWriter
                     return;
                 }
                 
-                button_action.Text = "書込";
+                button_action.Text = "設定";
                 NextPannel();
 
                 toolStripStatusLabel1.Text = "所定の位置に磁石を近づけて、電源を入れて下さい。";
+                regularMode = true;
                 PowerON();
 
                 if (startUp == true)
@@ -346,7 +348,7 @@ namespace MW_001_CodeWriter
                     button_action.Enabled = true;
                     idleFlag = true;
                     startUp = false;
-                    toolStripStatusLabel1.Text = "水位計IDの書き込みが可能です。";
+                    toolStripStatusLabel1.Text = "水位計IDの設定が可能です。";
                 }
                 return;
 
@@ -393,7 +395,7 @@ namespace MW_001_CodeWriter
                     button_stop.Text = "終了";
                     idleFlag = true;
                     toolStripProgressBar1.Value = 100;
-                    toolStripStatusLabel1.Text = "水位計ID書込み完了 終了ボタンを押して終了してください。";
+                    toolStripStatusLabel1.Text = "水位計ID設定完了 終了ボタンを押して終了してください。";
                     LOG.WriteLine(toolStripStatusLabel1.Text);
                     return;
                 }
@@ -418,6 +420,9 @@ namespace MW_001_CodeWriter
                 serialPort1.DataBits = 8; // Convert.ToInt32(cBoxDATABITS.Text);
                 serialPort1.StopBits = (StopBits)Enum.Parse(typeof(StopBits), "One");
                 serialPort1.Parity = (Parity)Enum.Parse(typeof(Parity), "None");
+
+                serialPort1.DiscardNull = true;
+                serialPort1.NewLine = "\n";
                 //serialPort1.DataReceived += new SerialDataReceivedEventHandler(serialPort1_DataReceived);
 
                 serialPort1.Open();
@@ -495,7 +500,7 @@ namespace MW_001_CodeWriter
                         }
                     }
 
-                    if (serialPort1.BytesToRead > 3)
+                    if (serialPort1.BytesToRead > 2)
                     {
                         /*dataIN += serialPort1.ReadLine();
                         if(dataIN.IndexOf("\n") > 0)
@@ -615,6 +620,7 @@ namespace MW_001_CodeWriter
 
                 if (s.Contains("START TEST"))
                 {
+                    regularMode = false;
                     toolStripProgressBar1.Value = 20;
                     startTime = DateTime.Now; //時間取得
                     Console.WriteLine("LOG: " + startTime);
@@ -627,11 +633,23 @@ namespace MW_001_CodeWriter
 
                 if (s.Contains("WAKEUP"))
                 {
-                    toolStripProgressBar1.Value = 25;
-                    toolStripStatusLabel1.Text = "通信部 起動開始 [強制終了40秒]";
-                    Console.WriteLine(toolStripStatusLabel1.Text);
-                    LOG.WriteLine(toolStripStatusLabel1.Text); //テストモード起動中
-                    return;
+                    if(regularMode == false)
+                    {
+                        toolStripProgressBar1.Value = 25;
+                        toolStripStatusLabel1.Text = "通信部 起動開始 [強制終了40秒]";
+                        Console.WriteLine(toolStripStatusLabel1.Text);
+                        LOG.WriteLine(toolStripStatusLabel1.Text); //テストモード起動中
+                        return;
+                    }
+                }
+
+                if (s.Contains("AT%"))
+                {
+                    if(regularMode == true)
+                    {
+                        toolStripStatusLabel1.Text = "テストモードで起動していません。水位計の電源を落としてください。";
+                        errFlag = true;
+                    }
                 }
 
                 if (s.Contains("NUM=0"))
@@ -689,7 +707,7 @@ namespace MW_001_CodeWriter
                             textBox_devicecode.Text = sbuf[2];
                             toolStripProgressBar1.Value = 40;
 
-                            //水位計ID書込み可
+                            //水位計ID設定可
                             statusFlag = true;
                             break;
                         }
@@ -876,7 +894,7 @@ namespace MW_001_CodeWriter
                         if (ts.TotalSeconds > 10)
                         {
                             //タイムアウトした
-                            toolStripStatusLabel1.Text = "書込できません。(10秒タイムアウト)";
+                            toolStripStatusLabel1.Text = "設定できません。(10秒タイムアウト)";
                             LOG.WriteLine(toolStripStatusLabel1.Text);
                             DialogResult result = MessageBox.Show(toolStripStatusLabel1.Text, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
@@ -913,7 +931,7 @@ namespace MW_001_CodeWriter
                 }
                 if (startUp == true)
                 {
-                    toolStripStatusLabel1.Text = "書込完了";
+                    toolStripStatusLabel1.Text = "設定完了";
                     Console.WriteLine(toolStripStatusLabel1.Text);
                     LOG.WriteLine(toolStripStatusLabel1.Text);
                     this.Update();
@@ -922,7 +940,7 @@ namespace MW_001_CodeWriter
                 }
                 if (endFlag == true)
                 {
-                    toolStripStatusLabel1.Text = "書込中停止";
+                    toolStripStatusLabel1.Text = "設定中停止";
                     LOG.WriteLine(toolStripStatusLabel1.Text);
                     DialogResult result = MessageBox.Show(toolStripStatusLabel1.Text, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     if (result == DialogResult.OK)
@@ -937,7 +955,7 @@ namespace MW_001_CodeWriter
             catch
             {
                 timeOut = false;
-                toolStripStatusLabel1.Text = "プログラム動作中エラー（書込中）";
+                toolStripStatusLabel1.Text = "プログラム動作中エラー（設定中）";
                 Console.WriteLine(toolStripStatusLabel1.Text);
                 LOG.WriteLine(toolStripStatusLabel1.Text);
                 DialogResult result = MessageBox.Show(toolStripStatusLabel1.Text, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -974,7 +992,7 @@ namespace MW_001_CodeWriter
                     if (cityFlag == true)
                     {
                         toolStripProgressBar1.Value = 45;
-                        toolStripStatusLabel1.Text = "自治体コード書込";
+                        toolStripStatusLabel1.Text = "自治体コード設定";
                         LOG.WriteLine(toolStripStatusLabel1.Text); //CITYCODE
                         cityFlag = false;
 
@@ -985,7 +1003,7 @@ namespace MW_001_CodeWriter
                     if (sensFlag == true)
                     {
                         toolStripProgressBar1.Value = 55; //action-10
-                        toolStripStatusLabel1.Text = "水位計番号書込";
+                        toolStripStatusLabel1.Text = "水位計番号設定";
                         LOG.WriteLine(toolStripStatusLabel1.Text); //SENSORNO
                         sensFlag = false;
 
@@ -1400,7 +1418,9 @@ namespace MW_001_CodeWriter
 
         private void バージョンToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("危機管理型水位計MW-001 水位計ID書換ツール\nバージョン: 1.00");
+            MessageBox.Show("危機管理型水位計MW-001 水位計ID設定ソフトウェア\nバージョン: 1.00\n" +
+                "Copyright (c) 2021 ABIT Co.\nReleased under the MIT license\n" +
+                "https://opensource.org/licenses/mit-license.php");
         }
     }
 }

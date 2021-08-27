@@ -252,7 +252,6 @@ namespace MW_001_CodeWriter
             // 
             this.serialPort1.BaudRate = 115200;
             this.serialPort1.ReadBufferSize = 8192;
-
             // 
             // menuStrip1
             // 
@@ -266,6 +265,7 @@ namespace MW_001_CodeWriter
             // 
             // バージョンToolStripMenuItem
             // 
+            this.バージョンToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.バージョンToolStripMenuItem.Font = new System.Drawing.Font("Yu Gothic UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.バージョンToolStripMenuItem.Name = "バージョンToolStripMenuItem";
             this.バージョンToolStripMenuItem.Size = new System.Drawing.Size(80, 25);
