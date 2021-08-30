@@ -709,14 +709,22 @@ namespace MW_001_CodeWriter
 
                         if (textBox_tellnumber.Text == callnum)
                         {
-                            textBox_citycode.Text = sbuf[1];
-                            textBox_devicecode.Text = sbuf[2];
-                            textBox_name.Text = sbuf[3];
-                            toolStripProgressBar1.Value = 40;
+                            if(textBox_csv.Text.Substring(0, textBox_csv.Text.Length-4) == sbuf[1])
+                            {
+                                textBox_citycode.Text = sbuf[1];
+                                textBox_devicecode.Text = sbuf[2];
+                                textBox_name.Text = sbuf[3];
+                                toolStripProgressBar1.Value = 40;
 
-                            //水位計ID設定可
-                            statusFlag = true;
-                            break;
+                                //水位計ID設定可
+                                statusFlag = true;
+                                break;
+                            }
+                            else
+                            {
+                                statusFlag = false;
+                            }
+
                         }
                         
                     }
