@@ -701,10 +701,17 @@ namespace MW_001_CodeWriter
                         string[] sbuf = dat.Split(',');
                         callnum = sbuf[0];
 
+                        if (!callnum.StartsWith("0"))
+                        {
+                            callnum = "0" + callnum;
+                        }
+
+
                         if (textBox_tellnumber.Text == callnum)
                         {
                             textBox_citycode.Text = sbuf[1];
                             textBox_devicecode.Text = sbuf[2];
+                            textBox_name.Text = sbuf[3];
                             toolStripProgressBar1.Value = 40;
 
                             //水位計ID設定可
@@ -735,6 +742,7 @@ namespace MW_001_CodeWriter
                         //log
                         LOG.WriteLine("自治体コード: " + textBox_citycode.Text);
                         LOG.WriteLine("水位計番号: " + textBox_devicecode.Text);
+                        LOG.WriteLine("水位計名称: " + textBox_name.Text);
                     }
                 }
                 catch

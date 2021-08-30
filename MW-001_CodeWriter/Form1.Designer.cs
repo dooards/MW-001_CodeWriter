@@ -39,7 +39,6 @@ namespace MW_001_CodeWriter
             this.panel2 = new System.Windows.Forms.Panel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.textBox_tellnumber = new System.Windows.Forms.TextBox();
             this.textBox_devicecode = new System.Windows.Forms.TextBox();
@@ -53,6 +52,7 @@ namespace MW_001_CodeWriter
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.バージョンToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timeLabel = new System.Windows.Forms.Label();
+            this.textBox_name = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -131,8 +131,8 @@ namespace MW_001_CodeWriter
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.textBox_name);
             this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.textBox_tellnumber);
             this.groupBox2.Controls.Add(this.textBox_devicecode);
@@ -148,36 +148,27 @@ namespace MW_001_CodeWriter
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(251, 42);
+            this.label5.Location = new System.Drawing.Point(24, 86);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(107, 25);
             this.label5.TabIndex = 8;
-            this.label5.Text = "水位計番号";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(23, 86);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(88, 25);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "電話番号";
+            this.label5.Text = "水位計名称";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(23, 42);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(110, 25);
+            this.label4.Size = new System.Drawing.Size(84, 25);
             this.label4.TabIndex = 6;
-            this.label4.Text = "自治体コード";
+            this.label4.Text = "SIM / ID";
             // 
             // textBox_tellnumber
             // 
             this.textBox_tellnumber.Font = new System.Drawing.Font("Yu Gothic UI", 14.25F);
-            this.textBox_tellnumber.Location = new System.Drawing.Point(151, 83);
+            this.textBox_tellnumber.Location = new System.Drawing.Point(137, 39);
             this.textBox_tellnumber.Name = "textBox_tellnumber";
-            this.textBox_tellnumber.Size = new System.Drawing.Size(277, 33);
+            this.textBox_tellnumber.Size = new System.Drawing.Size(129, 33);
             this.textBox_tellnumber.TabIndex = 3;
             this.textBox_tellnumber.TabStop = false;
             this.textBox_tellnumber.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -186,21 +177,23 @@ namespace MW_001_CodeWriter
             // textBox_devicecode
             // 
             this.textBox_devicecode.Font = new System.Drawing.Font("Yu Gothic UI", 14.25F);
-            this.textBox_devicecode.Location = new System.Drawing.Point(364, 39);
+            this.textBox_devicecode.Location = new System.Drawing.Point(366, 39);
             this.textBox_devicecode.Name = "textBox_devicecode";
             this.textBox_devicecode.Size = new System.Drawing.Size(64, 33);
             this.textBox_devicecode.TabIndex = 3;
             this.textBox_devicecode.TabStop = false;
+            this.textBox_devicecode.Text = "9999";
             this.textBox_devicecode.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // textBox_citycode
             // 
             this.textBox_citycode.Font = new System.Drawing.Font("Yu Gothic UI", 14.25F);
-            this.textBox_citycode.Location = new System.Drawing.Point(153, 39);
+            this.textBox_citycode.Location = new System.Drawing.Point(292, 39);
             this.textBox_citycode.Name = "textBox_citycode";
-            this.textBox_citycode.Size = new System.Drawing.Size(80, 33);
+            this.textBox_citycode.Size = new System.Drawing.Size(64, 33);
             this.textBox_citycode.TabIndex = 3;
             this.textBox_citycode.TabStop = false;
+            this.textBox_citycode.Text = "22000";
             this.textBox_citycode.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // button_action
@@ -230,7 +223,7 @@ namespace MW_001_CodeWriter
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripProgressBar1,
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 187);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 203);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(764, 30);
             this.statusStrip1.TabIndex = 3;
@@ -276,18 +269,25 @@ namespace MW_001_CodeWriter
             // 
             this.timeLabel.AutoSize = true;
             this.timeLabel.Font = new System.Drawing.Font("Yu Gothic UI Semibold", 14.25F, System.Drawing.FontStyle.Bold);
-            this.timeLabel.Location = new System.Drawing.Point(700, 191);
+            this.timeLabel.Location = new System.Drawing.Point(700, 206);
             this.timeLabel.Name = "timeLabel";
             this.timeLabel.Size = new System.Drawing.Size(31, 25);
             this.timeLabel.TabIndex = 5;
             this.timeLabel.Text = "12";
             this.timeLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
+            // textBox_name
+            // 
+            this.textBox_name.Location = new System.Drawing.Point(137, 83);
+            this.textBox_name.Name = "textBox_name";
+            this.textBox_name.Size = new System.Drawing.Size(293, 33);
+            this.textBox_name.TabIndex = 9;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(764, 217);
+            this.ClientSize = new System.Drawing.Size(764, 233);
             this.ControlBox = false;
             this.Controls.Add(this.timeLabel);
             this.Controls.Add(this.statusStrip1);
@@ -342,9 +342,9 @@ namespace MW_001_CodeWriter
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label timeLabel;
+        private System.Windows.Forms.TextBox textBox_name;
     }
 }
 
