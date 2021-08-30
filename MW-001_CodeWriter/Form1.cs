@@ -382,7 +382,9 @@ namespace MW_001_CodeWriter
                     CodeTest();
                 }
 
-                if(startUp == true)
+                System.Threading.Thread.Sleep(250);
+
+                if (startUp == true)
                 {
                     startUp = false;
                     WriteCommand("ATTACH");
@@ -883,6 +885,7 @@ namespace MW_001_CodeWriter
             //foreach (string s in RxData)
             string s = dataIN;
             {
+
                 if (s.Contains("OK"))
                 {
                     //次へ進む
@@ -1259,7 +1262,7 @@ namespace MW_001_CodeWriter
                 }
                 if (errFlag == true)
                 {
-                    toolStripStatusLabel1.Text = "基地局接続確認できません。(通信部エラー)";
+                    //toolStripStatusLabel1.Text = "基地局接続確認できません。(通信部エラー)";
                     LOG.WriteLine(toolStripStatusLabel1.Text);
                     DialogResult result = MessageBox.Show(toolStripStatusLabel1.Text, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     if (result == DialogResult.OK)
@@ -1310,6 +1313,12 @@ namespace MW_001_CodeWriter
                 {
                     timeOut = false;
                     errFlag = true;
+                }
+                if (s.Contains("***"))
+                {
+                    toolStripStatusLabel1.Text = "基地局接続確認できません。(リセット)";
+                    errFlag = true;
+                    return;
                 }
 
             }
