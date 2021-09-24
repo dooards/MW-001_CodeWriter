@@ -703,10 +703,10 @@ namespace MW_001_CodeWriter
                         string[] sbuf = dat.Split(',');
                         callnum = sbuf[0];
 
-                        if (!callnum.StartsWith("0"))
+                       /* if (!callnum.StartsWith("0"))
                         {
                             callnum = "0" + callnum;
-                        }
+                        }*/
 
 
                         if (textBox_tellnumber.Text == callnum)
