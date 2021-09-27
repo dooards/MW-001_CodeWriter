@@ -88,7 +88,7 @@ namespace MW_001_CodeWriter
             Application.DoEvents();
             Console.WriteLine("LOG: Form1_Shown");
             LOG.WriteLine("Version" + ver);
-            CSVSearch();
+            IdListSearch();
             MainThread();
         }
 
@@ -104,24 +104,24 @@ namespace MW_001_CodeWriter
             }
         }
 
-        private void CSVSearch()
+        private void IdListSearch()
         {
             //File Path
             string appPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
             appPath = appPath.Replace("水位計ID設定ツール.exe", "");
             Console.WriteLine("LOG: " + appPath + Environment.NewLine);
 
-            //CSV File Search
-            string[] CSVfiles = System.IO.Directory.GetFiles(@appPath, "*.csv", System.IO.SearchOption.AllDirectories);
-            if (CSVfiles.Length == 1) //There is a csv file.
+            //IdList File Search
+            string[] IdListfiles = System.IO.Directory.GetFiles(@appPath, "*.id", System.IO.SearchOption.AllDirectories);
+            if (IdListfiles.Length == 1) //There is a id file.
             {
-                filePath = CSVfiles[0];
+                filePath = IdListfiles[0];
                 LOG.WriteLine(filePath);
-                textBox_csv.Text = Path.GetFileName(CSVfiles[0]);
+                textBox_csv.Text = Path.GetFileName(IdListfiles[0]);
                 toolStripProgressBar1.Value = 5; //action-0
                 toolStripStatusLabel1.Text = "水位計IDファイル読込済";
             }
-            else //None or many csv files.
+            else //None or many id files.
             {
                 toolStripStatusLabel1.Text = "水位計IDファイルエラー";
                 errFlag = true;
@@ -713,7 +713,7 @@ namespace MW_001_CodeWriter
 
                         if (textBox_tellnumber.Text == callnum)
                         {
-                            if(textBox_csv.Text.Substring(0, textBox_csv.Text.Length-4) == sbuf[1])
+                            if(textBox_csv.Text.Substring(0, textBox_csv.Text.Length-3) == sbuf[1])
                             {
                                 textBox_citycode.Text = sbuf[1];
                                 textBox_devicecode.Text = sbuf[2];
