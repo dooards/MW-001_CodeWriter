@@ -25,6 +25,7 @@ namespace MW_001_CodeWriter
         string tellnum;
         string[,] portNames;
         //string[] RxData;
+        string ver = "1.00";
         string dataIN;
         string OldText;
         string[] GenCable= new string[10];
@@ -86,6 +87,7 @@ namespace MW_001_CodeWriter
         {
             Application.DoEvents();
             Console.WriteLine("LOG: Form1_Shown");
+            LOG.WriteLine("Version" + ver);
             CSVSearch();
             MainThread();
         }
@@ -1443,7 +1445,7 @@ namespace MW_001_CodeWriter
 
         private void バージョンToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("危機管理型水位計MW-001 水位計ID設定ソフトウェア\nバージョン: 1.00\n" +
+            MessageBox.Show("危機管理型水位計MW-001 水位計ID設定ソフトウェア\nバージョン: " + ver + "\n" +
                 "Copyright (c) 2021 ABIT Co.\nReleased under the MIT license\n" +
                 "https://opensource.org/licenses/mit-license.php");
         }
